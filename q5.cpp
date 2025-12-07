@@ -1,43 +1,56 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
-int main(){
 
-    int r,c;
-    cout<<"Enter number of rows and cols:";
-    cin>>r>>c;
+struct Node
+{
+    int val;
+    Node* next;
+};
 
-    int a[10][10];
-    cout<<"Enter the elements of matrix:"<<endl;
-    for(int i=0;i<r;i++)
+Node* add_last(Node* h, int x)
+{
+    Node* t = new Node;
+    t->val = x;
+    if(!h)
     {
-        for(int j=0;j<c;j++)
-        {
-            cin>>a[i][j];
-        }
+        t->next = nullptr;
+        return t;
     }
-        // sum of each row
-    for(int i=0;i<r;i++)
+    Node* c = h;
+    while(c->next)
     {
-        int rowsum=0;
-        for(int j=0;j<c;j++)
-        {
-            rowsum+=a[i][j];
-        }
-        cout<<"Sum of row "<<i+1<<" = "<<rowsum<<endl;
+        c = c->next;
     }
-
-    // sum of each column
-    for(int j=0;j<c;j++)
-    {
-        int colsum=0;
-        for(int i=0;i<r;i++)
-        {
-            colsum+=a[i][j];
-        }
-        cout<<"Sum of column "<<j+1<<" = "<<colsum<<endl;
-    }
-
-    return 0;
+    c->next = t;
+    t->next = nullptr;
+    return h;
 }
 
-   
+bool is_circular(Node* h)
+{
+    if(!h)
+    {
+        return false;
+    }
+    Node* c = h->next;
+    while(c && c != h)
+    {
+        c = c->next;
+    }
+    return c == h;
+}
+
+int main()
+{
+    int n, x;
+    Node* h = nullptr;
+
+    cin >> n;
+    for(int i = 0; i < n; i++)
+    {
+        cin >> x;
+        h = add_last(h, x);
+    }
+
+    cout << (is_circular(h) ? "True" : "False");
+}
